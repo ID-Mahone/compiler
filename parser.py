@@ -2,15 +2,18 @@ from rply import ParserGenerator
 from ast_1 import Number, Sum, Sub, Print
 
 class Parser:
-    def __init__(self):
+    def __init__(self, module, builder, printf):
         self.pg = ParserGenerator(
             ['NUMBER', 'PRINT', 'OPEN_PAREN','CLOSE_PAREN', 'SEMI_COLON', 'SUM', 'SUB']
         )
+        self.module = module 
+        self.builder = builder
+        self.printf = printf
 
     def parse(self):
         @self.pg.production('program: PRINT OPEN_PAREN expression CLOSE_PAREN SEMI_COLON')
         def program(p):
-            return Print(p[2])
+            return Print(self.builder, self.module, self.printf, p[2])
     
         @self.pg.production('expression : expression SUM expression')
         @self.pg.production('expression : expression SUB expression')
@@ -25,7 +28,7 @@ class Parser:
             
         @self.pg.production('expression : NUMBER')
         def number(p):
-            return Number(p[0].value)
+            return Number(self.builder, self.module, p[0].value)
         
         @self.pg.error
         def error_handle(token):
