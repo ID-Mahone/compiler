@@ -9,9 +9,10 @@ class Parser:
         self.module = module 
         self.builder = builder
         self.printf = printf
+        self.parse()
 
     def parse(self):
-        @self.pg.production('program: PRINT OPEN_PAREN expression CLOSE_PAREN SEMI_COLON')
+        @self.pg.production('program : PRINT OPEN_PAREN expression CLOSE_PAREN SEMI_COLON')
         def program(p):
             return Print(self.builder, self.module, self.printf, p[2])
     

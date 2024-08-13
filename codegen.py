@@ -7,11 +7,12 @@ class CodeGen():
         self.binding.initialize()
         self.binding.initialize_native_target()
         self.binding.initialize_native_asmprinter()
-        self._config_llvm()
+        self.__config__llvm()
         self._create_execution_engine()
+
         self._declare_print_function()
 
-    def __config_llvm(self):
+    def __config__llvm(self):
         # Config LLVM
         self.module = ir.Module(name=__file__)
         self.module.triple = self.binding.get_default_triple()
@@ -32,7 +33,7 @@ class CodeGen():
         self.engine = engine
 
     def _declare_print_function(self):
-        voidptr_ty = ir.InType(8).as_pointer()
+        voidptr_ty = ir.IntType(8).as_pointer()
         printf_ty = ir.FunctionType(ir.IntType(32), [voidptr_ty], var_arg=True)
         printf = ir.Function(self.module, printf_ty, name="printf")
         self.printf = printf

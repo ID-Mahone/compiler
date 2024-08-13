@@ -47,6 +47,5 @@ class Print():
         global_fmt = ir.GlobalVariable(self.module, c_fmt.type, name="fstr")
         global_fmt.linkage = 'internal'
         global_fmt.global_constant = True
-        global_fmt.initializer = c_fmtfmt_arg = self.builder.bitcast(global_fmt, voidptr_ty)
 
         self.builder.call(self.printf, [fmt_arg, value])
